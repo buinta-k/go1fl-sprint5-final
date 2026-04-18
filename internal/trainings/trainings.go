@@ -32,6 +32,10 @@ func (t *Training) Parse(datastring string) (error) {
         return fmt.Errorf("invalid steps")
     }
 
+    if strings.Contains(data[2], " ") {
+        return fmt.Errorf("invalid duration format")
+    }
+
     duration, err := time.ParseDuration(data[2])
     if err != nil || duration <= 0 {
         return fmt.Errorf("invalid duration")
@@ -40,6 +44,7 @@ func (t *Training) Parse(datastring string) (error) {
     t.Steps = steps
     t.TrainingType = data[1]
     t.Duration = duration
+
     return nil
 }
 
