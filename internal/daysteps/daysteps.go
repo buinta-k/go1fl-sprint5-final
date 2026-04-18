@@ -1,9 +1,14 @@
 package daysteps
 
-import ("strings"
-		"strconv"
-	   "github.com/buinta-k/go1fl-sprint5-final/blob/main/internal/spentenergy/spentenergy.go"
-	   )
+import (
+    "fmt"
+    "strconv"
+    "strings"
+    "time"
+
+    "github.com/Yandex-Practicum/tracker/internal/personaldata"
+    "github.com/Yandex-Practicum/tracker/internal/spentenergy"
+)
 
 type DaySteps struct {
 	Steps    int
