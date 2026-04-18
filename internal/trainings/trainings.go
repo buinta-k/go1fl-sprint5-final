@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"://github.com"
-	"://github.com"
+"://github.com"
+"github.com/Yandex-Practicum/tracker/internal/spentenergy"
 )
 
 type Training struct {
