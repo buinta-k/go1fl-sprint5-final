@@ -1,5 +1,7 @@
 package personaldata
 
+import "fmt"
+
 type Personal struct {
 	Name string
 	Weight int
