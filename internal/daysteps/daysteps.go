@@ -16,7 +16,7 @@ type DaySteps struct {
 	personaldata.Personal 
 }
 
-func (ds *DaySteps) Parse(datastring string) (err error) {
+func (ds *DaySteps) Parse(datastring string) (error) {
     data := strings.Split(datastring, ",")
     if len(data) != 3 {
         return fmt.Errorf("invalid format")
