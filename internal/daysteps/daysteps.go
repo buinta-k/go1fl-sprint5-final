@@ -18,7 +18,7 @@ type DaySteps struct {
 
 func (ds *DaySteps) Parse(datastring string) (error) {
     data := strings.Split(datastring, ",")
-    if len(data) != 3 {
+    if len(data) != 2 {
         return fmt.Errorf("invalid format")
     }
 
