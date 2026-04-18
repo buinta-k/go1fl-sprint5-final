@@ -16,8 +16,9 @@ type DaySteps struct {
 	personaldata.Personal 
 }
 
-func (ds *DaySteps) Parse(datastring string) (error) {
+func (ds *DaySteps) Parse(datastring string) error {
     data := strings.Split(datastring, ",")
+
     if len(data) != 2 {
         return fmt.Errorf("invalid format")
     }
@@ -31,7 +32,12 @@ func (ds *DaySteps) Parse(datastring string) (error) {
         return fmt.Errorf("invalid steps")
     }
 
-    duration, err := time.ParseDuration(data[2])
+    // защита от "30 min"
+    if strings.Contains(data[1], " ") {
+        return fmt.Errorf("invalid duration format")
+    }
+
+    duration, err := time.ParseDuration(data[1])
     if err != nil || duration <= 0 {
         return fmt.Errorf("invalid duration")
     }
@@ -39,6 +45,7 @@ func (ds *DaySteps) Parse(datastring string) (error) {
     ds.Steps = steps
     ds.Duration = duration
     return nil
+}
 }
 
 func (ds DaySteps) ActionInfo() (string, error) {
