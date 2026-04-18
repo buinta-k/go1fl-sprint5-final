@@ -20,32 +20,24 @@ type Training struct {
 func (t *Training) Parse(datastring string) (err error) {
 	data := strings.Split(datastring, ",")
 	if len(data) != 3 {
-		return fmt.Errorf("неверный формат данных: ожидалось 3 параметра")
+		return fmt.Errorf("invalid format")
 	}
+
 	steps, err := strconv.Atoi(data[0])
-	if err != nil {
-		return fmt.Errorf("ошибка парсинга шагов: %w", err)
+	if err != nil || steps <= 0 {
+		return fmt.Errorf("invalid steps")
 	}
-    if steps < 0 {
-        return fmt.Errorf("количество шагов не может быть отрицательным")
-    }
+
+	duration, err := time.ParseDuration(data[2])
+	if err != nil || duration <= 0 {
+		return fmt.Errorf("invalid duration")
+	}
 
 	t.Steps = steps
 	t.TrainingType = data[1]
-
-	
-	duration, err := time.ParseDuration(data[2])
-	if err != nil {
-		return fmt.Errorf("ошибка парсинга длительности: %w", err)
-	}
-    if duration <= 0 {
-        return fmt.Errorf("длительность должна быть больше нуля")
-    }
-
 	t.Duration = duration
 	return nil
 }
-
 
 func (t Training) ActionInfo() (string, error) {
 	dist := spentenergy.Distance(t.Steps, t.Height)
@@ -54,14 +46,12 @@ func (t Training) ActionInfo() (string, error) {
 	var calories float64
 	var err error
 
-	
 	switch t.TrainingType {
 	case "Бег":
 		calories, err = spentenergy.RunningSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
 	case "Ходьба":
 		calories, err = spentenergy.WalkingSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
 	default:
-		
 		return "", fmt.Errorf("неизвестный тип тренировки")
 	}
 
