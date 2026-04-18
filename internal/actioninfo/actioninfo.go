@@ -2,7 +2,7 @@ package actioninfo
 
 
 import (
-	"fmt" // Добавь эту строку
+	"fmt"
 )
 
 type DataParser interface {
