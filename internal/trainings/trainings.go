@@ -42,7 +42,6 @@ func (t *Training) Parse(datastring string) (error) {
     t.Duration = duration
     return nil
 }
-}
 
 func (t Training) ActionInfo() (string, error) {
 	dist := spentenergy.Distance(t.Steps, t.Height)
