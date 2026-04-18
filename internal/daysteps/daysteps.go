@@ -17,25 +17,33 @@ type DaySteps struct {
 }
 
 func (ds *DaySteps) Parse(datastring string) (err error) {
-    dataString := strings.Split(datastring, ",")
-    if len(dataString) != 3 {
-        return fmt.Errorf("invalid format")
-    }
+	data := strings.Split(datastring, ",")
+	if len(data) != 2 {
+		return fmt.Errorf("invalid format")
+	}
+	steps, err := strconv.Atoi(data[0])
+	if err != nil || steps <= 0 {
+		return fmt.Errorf("invalid steps")
+	}
+	duration, err := time.ParseDuration(data[1])
+	if err != nil || duration <= 0 {
+		return fmt.Errorf("invalid duration")
+	}
+	ds.Steps = steps
+	ds.Duration = duration
+	return nil
+}
 
-    steps, err := strconv.Atoi(dataString[0])
-    if err != nil || steps <= 0 { 
-        return fmt.Errorf("invalid steps")
-    }
+func (ds DaySteps) ActionInfo() (string, error) {
+	distance := spentenergy.Distance(ds.Steps, ds.Height)
+	calories, err := spentenergy.WalkingSpentCalories(ds.Steps, ds.Weight, ds.Height, ds.Duration)
+	if err != nil {
+		return "", err
+	}
+	result := fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.",
+		ds.Steps, distance, calories)
 
-    duration, err := time.ParseDuration(dataString[2])
-    if err != nil || duration <= 0 { 
-        return fmt.Errorf("invalid duration")
-    }
-
-    t.Steps = steps
-    t.TrainingType = dataString[1]
-    t.Duration = duration
-    return nil
+	return result, nil
 	
 }
 
