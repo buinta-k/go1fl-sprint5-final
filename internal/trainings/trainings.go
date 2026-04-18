@@ -1,11 +1,14 @@
 package trainings
 
 import (
-		"github.com/buinta-k/go1fl-sprint5-final/tree/main/internal/personaldata"
-		"strconv"
-		"time"
-		"strings"
-	   )
+    "fmt"
+    "strconv"
+    "strings"
+    "time"
+
+    "github.com/Yandex-Practicum/tracker/internal/personaldata"
+    "github.com/Yandex-Practicum/tracker/internal/spentenergy"
+)
 
 type Training struct {
 	Steps int
