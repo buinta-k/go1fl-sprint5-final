@@ -60,7 +60,7 @@ func (t Training) ActionInfo() (string, error) {
 		return "", err
 	}
 
-result := fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f",t.TrainingType, t.Duration.Hours(), dist, speed, calories,)
+result := fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f",t.TrainingType, t.Duration.Hours(), dist, speed, calories)
 
 	return result, nil
 }
