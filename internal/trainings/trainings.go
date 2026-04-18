@@ -18,6 +18,7 @@ type Training struct {
 }
 
 func (t *Training) Parse(datastring string) (error) {
+func (t *Training) Parse(datastring string) error {
 	data := strings.Split(datastring, ",")
 
 	if len(data) != 3 {
@@ -28,18 +29,15 @@ func (t *Training) Parse(datastring string) (error) {
 		data[i] = strings.TrimSpace(data[i])
 	}
 
-	// steps
 	steps, err := strconv.Atoi(data[0])
 	if err != nil || steps <= 0 {
 		return fmt.Errorf("invalid steps")
 	}
 
-	// type
 	if data[1] == "" {
 		return fmt.Errorf("invalid training type")
 	}
 
-	// duration (ВАЖНО: без ручных проверок пробелов)
 	duration, err := time.ParseDuration(data[2])
 	if err != nil || duration <= 0 {
 		return fmt.Errorf("invalid duration")
