@@ -17,21 +17,29 @@ type DaySteps struct {
 }
 
 func (ds *DaySteps) Parse(datastring string) (err error) {
-	data := strings.Split(datastring, ",")
-	if len(data) != 2 {
-		return fmt.Errorf("invalid format")
-	}
-	steps, err := strconv.Atoi(data[0])
-	if err != nil || steps <= 0 {
-		return fmt.Errorf("invalid steps")
-	}
-	duration, err := time.ParseDuration(data[1])
-	if err != nil || duration <= 0 {
-		return fmt.Errorf("invalid duration")
-	}
-	ds.Steps = steps
-	ds.Duration = duration
-	return nil
+    data := strings.Split(datastring, ",")
+    if len(data) != 3 {
+        return fmt.Errorf("invalid format")
+    }
+
+    for i := range data {
+        data[i] = strings.TrimSpace(data[i])
+    }
+
+    steps, err := strconv.Atoi(data[0])
+    if err != nil || steps <= 0 {
+        return fmt.Errorf("invalid steps")
+    }
+
+    duration, err := time.ParseDuration(data[2])
+    if err != nil || duration <= 0 {
+        return fmt.Errorf("invalid duration")
+    }
+
+    t.Steps = steps
+    t.TrainingType = data[1]
+    t.Duration = duration
+    return nil
 }
 
 func (ds DaySteps) ActionInfo() (string, error) {
