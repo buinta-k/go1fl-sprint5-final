@@ -36,9 +36,9 @@ func (ds *DaySteps) Parse(datastring string) (error) {
         return fmt.Errorf("invalid duration")
     }
 
-    t.Steps = steps
-    t.TrainingType = data[1]
-    t.Duration = duration
+    ds.Steps = steps
+    ds.TrainingType = data[1]
+    ds.Duration = duration
     return nil
 }
 
