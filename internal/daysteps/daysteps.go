@@ -37,7 +37,6 @@ func (ds *DaySteps) Parse(datastring string) (error) {
     }
 
     ds.Steps = steps
-    ds.TrainingType = data[1]
     ds.Duration = duration
     return nil
 }
