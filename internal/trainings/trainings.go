@@ -18,34 +18,39 @@ type Training struct {
 }
 
 func (t *Training) Parse(datastring string) (error) {
-    data := strings.Split(datastring, ",")
-    if len(data) != 3 {
-        return fmt.Errorf("invalid format")
-    }
+	data := strings.Split(datastring, ",")
 
-    for i := range data {
-        data[i] = strings.TrimSpace(data[i])
-    }
+	if len(data) != 3 {
+		return fmt.Errorf("invalid format")
+	}
 
-    steps, err := strconv.Atoi(data[0])
-    if err != nil || steps <= 0 {
-        return fmt.Errorf("invalid steps")
-    }
+	for i := range data {
+		data[i] = strings.TrimSpace(data[i])
+	}
 
-    if strings.Contains(data[2], " ") {
-        return fmt.Errorf("invalid duration format")
-    }
+	// steps
+	steps, err := strconv.Atoi(data[0])
+	if err != nil || steps <= 0 {
+		return fmt.Errorf("invalid steps")
+	}
 
-    duration, err := time.ParseDuration(data[2])
-    if err != nil || duration <= 0 {
-        return fmt.Errorf("invalid duration")
-    }
+	// type
+	if data[1] == "" {
+		return fmt.Errorf("invalid training type")
+	}
 
-    t.Steps = steps
-    t.TrainingType = data[1]
-    t.Duration = duration
+	// duration (ВАЖНО: без ручных проверок пробелов)
+	duration, err := time.ParseDuration(data[2])
+	if err != nil || duration <= 0 {
+		return fmt.Errorf("invalid duration")
+	}
 
-    return nil
+	t.Steps = steps
+	t.TrainingType = data[1]
+	t.Duration = duration
+
+	return nil
+}
 }
 
 func (t Training) ActionInfo() (string, error) {
