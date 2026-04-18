@@ -18,27 +18,25 @@ type Training struct {
 }
 
 func (t *Training) Parse(datastring string) (err error) {
-dataString := strings.Split(datastring, ",")
-	if len(dataString) != 3 {
-		return fmt.Errorf("неверное количество параметров: ожидалось 3, получено %d", len(dataString))
-	}
+    dataString := strings.Split(datastring, ",")
+    if len(dataString) != 3 {
+        return fmt.Errorf("invalid format")
+    }
 
-	steps, err := strconv.Atoi(dataString[0])
-	if err != nil {
-		return fmt.Errorf("ошибка парсинга шагов: %w", err)
-	}
+    steps, err := strconv.Atoi(dataString[0])
+    if err != nil || steps <= 0 {
+        return fmt.Errorf("invalid steps")
+    }
 
-	trainingType := dataString[1]
-	duration, err := time.ParseDuration(dataString[2]) // индекс 2, а не 3
-	if err != nil {
-		return fmt.Errorf("ошибка парсинга длительности: %w", err)
-	}
+    duration, err := time.ParseDuration(dataString[2])
+    if err != nil || duration <= 0 {
+        return fmt.Errorf("invalid duration")
+    }
 
-	t.Steps = steps
-	t.TrainingType = trainingType
-	t.Duration = duration
-
-	return nil
+    t.Steps = steps
+    t.TrainingType = dataString[1]
+    t.Duration = duration
+    return nil
 	
 }
 	
