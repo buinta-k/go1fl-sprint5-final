@@ -1,9 +1,13 @@
 package personaldata
 
 type Personal struct {
-	// TODO: добавить поля
+	Name string
+	Weight int
+	Height int
 }
 
 func (p Personal) Print() {
-	// TODO: реализовать функцию
+	fmt.Printf("Имя: <%s>\n", p.Name)
+	fmt.Printf("Вес: <%d>\n", p.Weight)
+	fmt.Printf("Рост: <%d>\n", p.Height)
 }
