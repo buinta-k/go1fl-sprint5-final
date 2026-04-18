@@ -17,7 +17,7 @@ func WalkingSpentCalories(steps int, weight, height float64, duration time.Durat
 	if steps<=0 || weight<=0 || height<=0 || duration<=0 {
 		return 0, fmt.Errorf("Некорректный параметр")
 	}
-	meanSpeed:=MeanSpeed(steps, height, duration) {
+	meanSpeed:=MeanSpeed(steps, height, duration) 
 	durationInMinutes:=duration.Minutes()
 		
 	result := (weight * meanSpeed * durationInMinutes) / minInH
