@@ -1,5 +1,10 @@
 package actioninfo
 
+
+import (
+	"fmt" // Добавь эту строку
+)
+
 type DataParser interface {
 	Parse(datastring string) error
     ActionInfo() (string, error)
