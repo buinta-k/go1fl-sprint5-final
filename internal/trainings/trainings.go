@@ -38,34 +38,32 @@ func (t *DaySteps) Parse(datastring string) error {
 	t.Duration = dur
 	return nil
 }
-func (t Training) ActionInfo() (string, error) {
-	dist := spentenergy.Distance(t.Steps, t.Height)
-	speed := spentenergy.MeanSpeed(t.Steps, t.Height, t.Duration)
-
-	var calories float64
-	var err error
-
-	switch t.TrainingType {
-	case "Бег":
-		calories, err = spentenergy.RunningSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
-	case "Ходьба":
-		calories, err = spentenergy.WalkingSpentCalories(t.Steps, t.Weight, t.Height, t.Duration)
-	default:
-		return "", fmt.Errorf("неизвестный тип тренировки")
+func (t *Training) Parse(datastring string) error {
+	data := strings.Split(datastring, ",")
+    
+	if len(data) != 3 {
+		return fmt.Errorf("invalid format")
 	}
 
-	if err != nil {
-		return "", err
+	steps, err := strconv.Atoi(data[0])
+	if err != nil || steps <= 0 {
+		return fmt.Errorf("invalid steps")
 	}
 
-	result := fmt.Sprintf(
-		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n",
-		t.TrainingType,
-		t.Duration.Hours(),
-		dist,
-		speed,
-		calories,
-	)
+	trainingType := strings.TrimSpace(data[1])
+	if trainingType == "" {
+		return fmt.Errorf("invalid training type")
+	}
 
-	return result, nil
+	durStr := strings.TrimSpace(data[2])
+	dur, err := time.ParseDuration(durStr)
+	if err != nil || dur <= 0 {
+		return fmt.Errorf("invalid duration")
+	}
+
+	t.Steps = steps
+	t.TrainingType = trainingType
+	t.Duration = dur
+
+	return nil
 }
