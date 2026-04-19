@@ -17,29 +17,26 @@ type DaySteps struct {
 }
 
 func (d *DaySteps) Parse(datastring string) error {
-    data := strings.Split(datastring, ",")
-    if len(data) != 2 { // В daysteps обычно 2 параметра: шаги и время
-        return fmt.Errorf("Некорректный формат")
-    }
+	data := strings.Split(datastring, ",")
+	if len(data) != 2 {
+		return fmt.Errorf("invalid format")
+	}
 
-    steps, err := strconv.Atoi(data[0]) 
-    if err != nil || steps <= 0 {
-        return fmt.Errorf("Некорректный формат")
-    }
+	steps, err := strconv.Atoi(data[0])
+	if err != nil || steps <= 0 {
+		return fmt.Errorf("invalid steps")
+	}
 
-    durStr := strings.TrimSpace(data[1])
-    // УБЕРИТЕ проверку на точку здесь!
-    duration, err := time.ParseDuration(durStr)
-    if err != nil || duration <= 0 {
-        return fmt.Errorf("Некорректный формат")
-    }
+	durStr := strings.TrimSpace(data[1])
 
-    d.Steps = steps
-    d.Duration = duration
-    return nil
-}
+	dur, err := time.ParseDuration(durStr)
+	if err != nil || dur <= 0 {
+		return fmt.Errorf("invalid duration")
+	}
 
-	return fmt.Errorf("Некорректный формат")
+	d.Steps = steps
+	d.Duration = dur
+	return nil
 }
 
 func (ds *DaySteps) ActionInfo() (string, error) {
