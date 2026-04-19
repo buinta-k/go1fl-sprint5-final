@@ -32,15 +32,32 @@ func (ds *DaySteps) Parse(datastring string) error {
 		return fmt.Errorf("invalid steps")
 	}
 
-	duration, err := parseDurationHM(data[1])
-	if err != nil || duration <= 0 {
-		return fmt.Errorf("invalid duration")
+	str := data[1]
+
+	var hours, minutes int
+
+	n, err := fmt.Sscanf(str, "%dh%dm", &hours, &minutes)
+	if err == nil && n == 2 {
+		ds.Steps = steps
+		ds.Duration = time.Duration(hours)*time.Hour + time.Duration(minutes)*time.Minute
+		return nil
 	}
 
-	ds.Steps = steps
-	ds.Duration = duration
+	n, err = fmt.Sscanf(str, "%dh", &hours)
+	if err == nil && n == 1 {
+		ds.Steps = steps
+		ds.Duration = time.Duration(hours) * time.Hour
+		return nil
+	}
 
-	return nil
+	n, err = fmt.Sscanf(str, "%dm", &minutes)
+	if err == nil && n == 1 {
+		ds.Steps = steps
+		ds.Duration = time.Duration(minutes) * time.Minute
+		return nil
+	}
+
+	return fmt.Errorf("invalid duration")
 }
 
 func (ds *DaySteps) ActionInfo() (string, error) {
