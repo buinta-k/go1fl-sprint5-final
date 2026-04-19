@@ -43,7 +43,7 @@ func (ds *DaySteps) Parse(datastring string) error {
 	return nil
 }
 
-func (ds DaySteps) ActionInfo() (string, error) {
+func (ds *DaySteps) ActionInfo() (string, error) {
 	distance := spentenergy.Distance(ds.Steps, ds.Height)
 
 	calories, err := spentenergy.WalkingSpentCalories(
