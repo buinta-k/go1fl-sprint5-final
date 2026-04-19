@@ -18,8 +18,11 @@ type Training struct {
 }
 
 func (t *Training) Parse(datastring string) error {
-	data := strings.Split(datastring, ",")
+	if strings.TrimSpace(datastring) == "" {
+		return fmt.Errorf("invalid format")
+	}
 
+	data := strings.Split(datastring, ",")
 	if len(data) != 3 {
 		return fmt.Errorf("invalid format")
 	}
@@ -37,13 +40,11 @@ func (t *Training) Parse(datastring string) error {
 		return fmt.Errorf("invalid training type")
 	}
 
-	rawDuration := data[2]
-
-	if strings.Contains(rawDuration, ".") {
+	if strings.ContainsAny(data[2], ".") {
 		return fmt.Errorf("invalid duration")
 	}
 
-	duration, err := time.ParseDuration(rawDuration)
+	duration, err := time.ParseDuration(data[2])
 	if err != nil || duration <= 0 {
 		return fmt.Errorf("invalid duration")
 	}
