@@ -19,39 +19,41 @@ type Training struct {
 
 func (t *Training) Parse(datastring string) error {
 	datastring = strings.TrimSpace(datastring)
-	parts := strings.Split(datastring, ",")
+	data := strings.Split(datastring, ",")
 
-	if len(parts) != 3 {
+	if len(data) != 3 {
 		return fmt.Errorf("invalid format")
 	}
 
-	for i := range parts {
-		parts[i] = strings.TrimSpace(parts[i])
+	for i := range data {
+		data[i] = strings.TrimSpace(data[i])
 	}
 
-	steps, err := strconv.Atoi(parts[0])
+	steps, err := strconv.Atoi(data[0])
 	if err != nil || steps <= 0 {
 		return fmt.Errorf("invalid steps")
 	}
 	t.Steps = steps
 
-	if parts[1] == "" {
+	if data[1] == "" {
 		return fmt.Errorf("invalid training type")
 	}
-	t.TrainingType = parts[1]
+	t.TrainingType = data[1]
 
-	d := parts[2]
-
-	if d == "" {
+	dur, err := time.ParseDuration(data[2])
+	if err != nil {
 		return fmt.Errorf("invalid duration")
 	}
 
-	duration, err := parseStrictDuration(d)
-	if err != nil || duration <= 0 {
+	if dur <= 0 {
 		return fmt.Errorf("invalid duration")
 	}
 
-	t.Duration = duration
+	if strings.Contains(data[2], ".") {
+		return fmt.Errorf("invalid duration")
+	}
+
+	t.Duration = dur
 	return nil
 }
 func (t Training) ActionInfo() (string, error) {
