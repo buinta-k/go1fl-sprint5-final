@@ -16,48 +16,30 @@ type DaySteps struct {
 	personaldata.Personal
 }
 
-func (ds *DaySteps) Parse(datastring string) error {
-	data := strings.Split(datastring, ",")
+func (d *DaySteps) Parse(datastring string) error {
+    data := strings.Split(datastring, ",")
+    if len(data) != 2 { // В daysteps обычно 2 параметра: шаги и время
+        return fmt.Errorf("Некорректный формат")
+    }
 
-	if len(data) != 2 {
-		return fmt.Errorf("invalid format")
-	}
+    steps, err := strconv.Atoi(data[0]) 
+    if err != nil || steps <= 0 {
+        return fmt.Errorf("Некорректный формат")
+    }
 
-	for i := range data {
-		data[i] = strings.TrimSpace(data[i])
-	}
+    durStr := strings.TrimSpace(data[1])
+    // УБЕРИТЕ проверку на точку здесь!
+    duration, err := time.ParseDuration(durStr)
+    if err != nil || duration <= 0 {
+        return fmt.Errorf("Некорректный формат")
+    }
 
-	steps, err := strconv.Atoi(data[0])
-	if err != nil || steps <= 0 {
-		return fmt.Errorf("invalid steps")
-	}
+    d.Steps = steps
+    d.Duration = duration
+    return nil
+}
 
-	str := data[1]
-
-	var hours, minutes int
-
-	n, err := fmt.Sscanf(str, "%dh%dm", &hours, &minutes)
-	if err == nil && n == 2 {
-		ds.Steps = steps
-		ds.Duration = time.Duration(hours)*time.Hour + time.Duration(minutes)*time.Minute
-		return nil
-	}
-
-	n, err = fmt.Sscanf(str, "%dh", &hours)
-	if err == nil && n == 1 {
-		ds.Steps = steps
-		ds.Duration = time.Duration(hours) * time.Hour
-		return nil
-	}
-
-	n, err = fmt.Sscanf(str, "%dm", &minutes)
-	if err == nil && n == 1 {
-		ds.Steps = steps
-		ds.Duration = time.Duration(minutes) * time.Minute
-		return nil
-	}
-
-	return fmt.Errorf("invalid duration")
+	return fmt.Errorf("Некорректный формат")
 }
 
 func (ds *DaySteps) ActionInfo() (string, error) {
