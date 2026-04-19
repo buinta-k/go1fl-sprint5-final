@@ -18,39 +18,42 @@ type Training struct {
 }
 
 func (t *Training) Parse(datastring string) error {
-	data := strings.Split(datastring, ",")
+	datastring = strings.TrimSpace(datastring)
+	parts := strings.Split(datastring, ",")
 
-	if len(data) != 3 {
+	if len(parts) != 3 {
 		return fmt.Errorf("invalid format")
 	}
 
-	// строгая проверка пробелов (ВАЖНО)
-	for _, v := range data {
-		if v != strings.TrimSpace(v) {
-			return fmt.Errorf("invalid format")
-		}
+	for i := range parts {
+		parts[i] = strings.TrimSpace(parts[i])
 	}
 
-	steps, err := strconv.Atoi(data[0])
+	steps, err := strconv.Atoi(parts[0])
 	if err != nil || steps <= 0 {
 		return fmt.Errorf("invalid steps")
 	}
 	t.Steps = steps
 
-	if data[1] == "" {
+	if parts[1] == "" {
 		return fmt.Errorf("invalid training type")
 	}
-	t.TrainingType = data[1]
+	t.TrainingType = parts[1]
 
-	duration, err := time.ParseDuration(data[2])
+	d := parts[2]
+
+	if d == "" {
+		return fmt.Errorf("invalid duration")
+	}
+
+	duration, err := parseStrictDuration(d)
 	if err != nil || duration <= 0 {
 		return fmt.Errorf("invalid duration")
 	}
-	t.Duration = duration
 
+	t.Duration = duration
 	return nil
 }
-
 func (t Training) ActionInfo() (string, error) {
 	dist := spentenergy.Distance(t.Steps, t.Height)
 	speed := spentenergy.MeanSpeed(t.Steps, t.Height, t.Duration)
