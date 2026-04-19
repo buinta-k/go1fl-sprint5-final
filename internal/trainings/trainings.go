@@ -18,7 +18,9 @@ type Training struct {
 }
 
 func (t *Training) Parse(datastring string) error {
+	datastring = strings.TrimSpace(datastring)
 	data := strings.Split(datastring, ",")
+
 	if len(data) != 3 {
 		return fmt.Errorf("invalid format")
 	}
@@ -39,7 +41,7 @@ func (t *Training) Parse(datastring string) error {
 	t.TrainingType = data[1]
 
 	duration, err := time.ParseDuration(data[2])
-	if err != nil || duration <= 0 {
+	if err != nil {
 		return fmt.Errorf("invalid duration")
 	}
 	t.Duration = duration
