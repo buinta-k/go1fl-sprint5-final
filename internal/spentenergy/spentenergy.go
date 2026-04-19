@@ -13,8 +13,12 @@ const (
 	walkingCaloriesCoefficient = 0.5  // коэффициент для расчета калорий при ходьбе.
 )
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	if steps <= 0 || weight <= 0 || height <= 0 || duration <= 0 {
+	if steps <= 0 || weight <= 0 || height <= 0 {
 		return 0, fmt.Errorf("Некорректный параметр")
+	}
+
+	if duration <= 0 {
+		return 0, nil
 	}
 
 	meanSpeed := MeanSpeed(steps, height, duration)
@@ -25,8 +29,12 @@ func WalkingSpentCalories(steps int, weight, height float64, duration time.Durat
 }
 
 func RunningSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
-	if steps <= 0 || weight <= 0 || height <= 0 || duration <= 0 {
+	if steps <= 0 || weight <= 0 || height <= 0 {
 		return 0, fmt.Errorf("Некорректный параметр")
+	}
+
+	if duration <= 0 {
+		return 0, nil
 	}
 
 	meanSpeed := MeanSpeed(steps, height, duration)
@@ -36,10 +44,9 @@ func RunningSpentCalories(steps int, weight, height float64, duration time.Durat
 }
 
 func MeanSpeed(steps int, height float64, duration time.Duration) float64 {
-	if steps <= 0 || height <= 0 || duration <= 0 {
+	if duration <= 0 {
 		return 0
 	}
-
 	distance := Distance(steps, height)
 	return distance / duration.Hours()
 }
