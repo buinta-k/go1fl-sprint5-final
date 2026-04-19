@@ -37,16 +37,35 @@ func (t *Training) Parse(datastring string) error {
 		return fmt.Errorf("invalid training type")
 	}
 
-	duration, err := time.ParseDuration(data[2])
-	if err != nil || duration <= 0 {
-		return fmt.Errorf("invalid duration")
+	str := data[2]
+
+	var hours, minutes int
+
+	n, err := fmt.Sscanf(str, "%dh%dm", &hours, &minutes)
+	if err == nil && n == 2 {
+		t.Steps = steps
+		t.TrainingType = data[1]
+		t.Duration = time.Duration(hours)*time.Hour + time.Duration(minutes)*time.Minute
+		return nil
 	}
 
-	t.Steps = steps
-	t.TrainingType = data[1]
-	t.Duration = duration
+	n, err = fmt.Sscanf(str, "%dh", &hours)
+	if err == nil && n == 1 {
+		t.Steps = steps
+		t.TrainingType = data[1]
+		t.Duration = time.Duration(hours) * time.Hour
+		return nil
+	}
 
-	return nil
+	n, err = fmt.Sscanf(str, "%dm", &minutes)
+	if err == nil && n == 1 {
+		t.Steps = steps
+		t.TrainingType = data[1]
+		t.Duration = time.Duration(minutes) * time.Minute
+		return nil
+	}
+
+	return fmt.Errorf("invalid duration")
 }
 
 func (t Training) ActionInfo() (string, error) {
