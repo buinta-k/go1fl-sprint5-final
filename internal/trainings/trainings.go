@@ -17,36 +17,27 @@ type Training struct {
 	personaldata.Personal
 }
 
-func (t *Training) Parse(datastring string) error {
+func (t *DaySteps) Parse(datastring string) error {
 	data := strings.Split(datastring, ",")
-	if len(data) != 3 {
+	if len(data) != 2 { // В daysteps обычно 2 параметра
 		return fmt.Errorf("invalid format")
-	}
-
-	for i := range data {
-		data[i] = strings.TrimSpace(data[i])
 	}
 
 	steps, err := strconv.Atoi(data[0])
 	if err != nil || steps <= 0 {
 		return fmt.Errorf("invalid steps")
 	}
-	t.Steps = steps
 
-	if data[1] == "" {
-		return fmt.Errorf("invalid training type")
-	}
-	t.TrainingType = data[1]
-
-	dur, err := time.ParseDuration(data[2])
+	durStr := strings.TrimSpace(data[1])
+	dur, err := time.ParseDuration(durStr)
 	if err != nil || dur <= 0 {
 		return fmt.Errorf("invalid duration")
 	}
-	t.Duration = dur
 
+	t.Steps = steps
+	t.Duration = dur
 	return nil
 }
-
 func (t Training) ActionInfo() (string, error) {
 	dist := spentenergy.Distance(t.Steps, t.Height)
 	speed := spentenergy.MeanSpeed(t.Steps, t.Height, t.Duration)
