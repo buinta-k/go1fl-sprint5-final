@@ -18,7 +18,6 @@ type Training struct {
 }
 
 func (t *Training) Parse(datastring string) (error) {
-func (t *Training) Parse(datastring string) error {
 	data := strings.Split(datastring, ",")
 
 	if len(data) != 3 {
@@ -48,7 +47,6 @@ func (t *Training) Parse(datastring string) error {
 	t.Duration = duration
 
 	return nil
-}
 }
 
 func (t Training) ActionInfo() (string, error) {
