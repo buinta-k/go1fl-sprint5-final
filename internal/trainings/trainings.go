@@ -49,7 +49,7 @@ func (t *Training) Parse(datastring string) error {
 	return nil
 }
 
-func (t *Training) ActionInfo() (string, error) {
+func (t Training) ActionInfo() (string, error) {
 	dist := spentenergy.Distance(t.Steps, t.Height)
 	speed := spentenergy.MeanSpeed(t.Steps, t.Height, t.Duration)
 
@@ -70,7 +70,7 @@ func (t *Training) ActionInfo() (string, error) {
 	}
 
 	result := fmt.Sprintf(
-		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n", t.TrainingType, t.Duration.Hours(), dist, speed, calories )
+		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\n"Сожгли калорий: %.2f"\n", t.TrainingType, t.Duration.Hours(), dist, speed, calories )
 
 	return result, nil
 }
