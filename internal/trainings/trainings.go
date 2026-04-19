@@ -49,7 +49,7 @@ func (t *Training) Parse(datastring string) error {
 	return nil
 }
 
-func (t *Training) ActionInfo() (string, error) {
+func (t Training) ActionInfo() (string, error) {
 	dist := spentenergy.Distance(t.Steps, t.Height)
 	speed := spentenergy.MeanSpeed(t.Steps, t.Height, t.Duration)
 
