@@ -19,6 +19,11 @@ type Training struct {
 
 func (t *Training) Parse(datastring string) error {
 	datastring = strings.TrimSpace(datastring)
+
+	if strings.Contains(datastring, " ,") || strings.Contains(datastring, ", ") {
+		return fmt.Errorf("invalid format")
+	}
+
 	data := strings.Split(datastring, ",")
 
 	if len(data) != 3 {
@@ -35,12 +40,21 @@ func (t *Training) Parse(datastring string) error {
 	}
 	t.Steps = steps
 
-	if data[1] == "" {
+	if data[1] != "Бег" && data[1] != "Ходьба" {
 		return fmt.Errorf("invalid training type")
 	}
 	t.TrainingType = data[1]
 
-	dur, err := time.ParseDuration(data[2])
+	durStr := data[2]
+
+	if strings.Contains(durStr, " ") {
+		return fmt.Errorf("invalid duration")
+	}
+	if strings.Contains(durStr, ".") {
+		return fmt.Errorf("invalid duration")
+	}
+
+	dur, err := time.ParseDuration(durStr)
 	if err != nil {
 		return fmt.Errorf("invalid duration")
 	}
@@ -49,13 +63,11 @@ func (t *Training) Parse(datastring string) error {
 		return fmt.Errorf("invalid duration")
 	}
 
-	if strings.Contains(data[2], ".") {
-		return fmt.Errorf("invalid duration")
-	}
-
 	t.Duration = dur
+
 	return nil
 }
+
 func (t Training) ActionInfo() (string, error) {
 	dist := spentenergy.Distance(t.Steps, t.Height)
 	speed := spentenergy.MeanSpeed(t.Steps, t.Height, t.Duration)
@@ -77,7 +89,13 @@ func (t Training) ActionInfo() (string, error) {
 	}
 
 	result := fmt.Sprintf(
-		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n", t.TrainingType, t.Duration.Hours(), dist, speed, calories )
+		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n",
+		t.TrainingType,
+		t.Duration.Hours(),
+		dist,
+		speed,
+		calories,
+	)
 
 	return result, nil
 }
