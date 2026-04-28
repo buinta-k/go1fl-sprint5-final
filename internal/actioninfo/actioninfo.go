@@ -12,7 +12,6 @@ type DataParser interface {
 
 func Info(dataset []string, dp DataParser) {
 	    for _, data := range dataset {
-        
         err := dp.Parse(data)
         if err != nil {
             fmt.Printf("ошибка обработки данных '%s': %v\n", data, err)
