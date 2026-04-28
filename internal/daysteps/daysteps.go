@@ -1,63 +1,13 @@
 package daysteps
 
-import (
-	"fmt"
-	"strconv"
-	"strings"
-	"time"
-
-	"github.com/Yandex-Practicum/tracker/internal/personaldata"
-	"github.com/Yandex-Practicum/tracker/internal/spentenergy"
-)
-
 type DaySteps struct {
-	Steps    int
-	Duration time.Duration
-	personaldata.Personal
+	// TODO: добавить поля
 }
 
-func (d *DaySteps) Parse(datastring string) error {
-	data := strings.Split(datastring, ",")
-	if len(data) != 2 {
-		return fmt.Errorf("invalid format")
-	}
-
-	steps, err := strconv.Atoi(data[0])
-	if err != nil || steps <= 0 {
-		return fmt.Errorf("invalid steps")
-	}
-
-	durStr := strings.TrimSpace(data[1])
-
-	dur, err := time.ParseDuration(durStr)
-	if err != nil || dur <= 0 {
-		return fmt.Errorf("invalid duration")
-	}
-
-	d.Steps = steps
-	d.Duration = dur
-	return nil
+func (ds *DaySteps) Parse(datastring string) (err error) {
+	// TODO: реализовать функцию
 }
 
-func (ds *DaySteps) ActionInfo() (string, error) {
-	distance := spentenergy.Distance(ds.Steps, ds.Height)
-
-	calories, err := spentenergy.WalkingSpentCalories(
-		ds.Steps,
-		ds.Weight,
-		ds.Height,
-		ds.Duration,
-	)
-	if err != nil {
-		return "", err
-	}
-
-	result := fmt.Sprintf(
-		"Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.\n",
-		ds.Steps,
-		distance,
-		calories,
-	)
-
-	return result, nil
+func (ds DaySteps) ActionInfo() (string, error) {
+	// TODO: реализовать функцию
 }
